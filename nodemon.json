@@ -1,0 +1,7 @@
+{
+  "watch": ["server"],
+  "ext": ".ts,.js,.svelte,.md,.css",
+  "delay": "500",
+  "ignore": [],
+  "exec": "node server"
+}

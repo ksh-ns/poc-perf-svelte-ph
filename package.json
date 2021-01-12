@@ -1,0 +1,22 @@
+{
+  "name": "poc-perf-svelte",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "dev": "nodemon",
+    "go": "rollup --config"
+  },
+  "dependencies": {
+    "@rollup/plugin-node-resolve": "^11.0.1",
+    "express": "^4.17.1",
+    "rollup": "^2.36.1",
+    "rollup-plugin-css-chunks": "^2.0.2",
+    "rollup-plugin-svelte": "^7.0.0",
+    "svelte": "^3.31.2",
+    "svelte-preprocess": "^4.6.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  }
+}
