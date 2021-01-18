@@ -4,15 +4,13 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "dev": "nodemon",
-    "go": "rollup --config"
+    "dev": "nodemon"
   },
   "dependencies": {
-    "@rollup/plugin-node-resolve": "^11.0.1",
     "express": "^4.17.1",
-    "rollup": "^2.36.1",
-    "rollup-plugin-css-chunks": "^2.0.2",
-    "rollup-plugin-svelte": "^7.0.0",
+    "fastify": "^3.9.2",
+    "fastify-static": "^3.3.1",
+    "glob": "^7.1.6",
     "svelte": "^3.31.2",
     "svelte-preprocess": "^4.6.1"
   },

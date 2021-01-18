@@ -1,41 +1,49 @@
 require("svelte/register");
 
-const express = require("express");
-const app = express();
-const port = 3000;
+const path = require("path");
+const glob = require("glob");
+const fastify = require("fastify")({ logger: true });
 
-app.use(express.static("static"));
-
-const render = (req, res, path) => {
-  const Page = require("./routes/" + path + ".svelte").default;
-
-  const result = Page.render();
-  console.log("result :>> ", result);
-  const { html, css, head } = result;
-
-  res.send(`
-    <html>
-      <head>
-        ${head}
-        <style>${css.code}</style>
-      </head>
-      <body>${html}</body>
-    </html>
-  `);
-};
-
-app.get("/", (req, res) => {
-  render(req, res, "index");
+fastify.register(require("fastify-static"), {
+  root: path.join(__dirname, "../static"),
 });
 
-app.get("/counter", (req, res) => {
-  render(req, res, "counter");
+const routes = glob
+  .sync(path.join(__dirname, "routes**/*.svelte"))
+  .map((file) => {
+    const route = `/${path
+      .relative(path.join(__dirname, "routes"), file)
+      .replace(/\.svelte$/, "")
+      .replace(/\/index$/, "")
+      .replace(/^index$/, "")}`;
+    const component = require(file).default;
+    return { route, component };
+  });
+
+routes.forEach(({ route, component }) => {
+  console.log(route);
+  fastify.get(route, (req, res) => {
+    const result = component.render();
+    console.log("result :>> ", result);
+    const { html, css, head } = result;
+
+    res.type("text/html").send(`
+      <html>
+        <head>
+          ${head}
+          <style>${css.code}</style>
+        </head>
+        <body>${html}</body>
+      </html>
+    `);
+  });
 });
 
-app.get("/hello", (req, res) => {
-  res.send("Hello World!");
-});
-
-app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`);
-});
+(async () => {
+  try {
+    await fastify.listen(3000);
+  } catch (err) {
+    fastify.log.error(err);
+    process.exit(1);
+  }
+})();

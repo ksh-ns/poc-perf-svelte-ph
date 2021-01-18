@@ -2,6 +2,6 @@
   "watch": ["server"],
   "ext": ".ts,.js,.svelte,.md,.css",
   "delay": "500",
-  "ignore": [],
+  "ignore": ["server/static"],
   "exec": "node server"
 }
