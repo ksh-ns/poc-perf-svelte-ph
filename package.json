@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "nodemon",
     "start": "node server",
-    "build": "NODE_ENV=production node build.js"
+    "build": "NODE_ENV=production node build.js",
+    "export": "cp -R server/static/. public; yarn build; NODE_ENV=production node export.js"
   },
   "dependencies": {
     "cssnano": "^4.1.10",

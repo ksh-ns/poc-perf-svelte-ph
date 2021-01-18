@@ -22,7 +22,6 @@ const routes = glob
   });
 
 routes.forEach(({ route, component }) => {
-  console.log(route);
   fastify.get(route, async (req, res) => {
     const result = require(component).default.render();
     const { html, css, head } = result;
