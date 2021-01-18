@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "server/serverless.js",
+      "use": "@now/node",
+      "config": {
+        "helpers": false
+      }
+    }
+  ],
+  "routes": [{ "src": "/.*", "dest": "/server/serverless.js" }]
+}
