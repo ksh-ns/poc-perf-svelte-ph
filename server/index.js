@@ -1,41 +1,44 @@
-require("svelte/register");
-
 const path = require("path");
 const glob = require("glob");
 const fastify = require("fastify")({ logger: true });
+const { minify } = require("html-minifier");
 
 fastify.register(require("fastify-static"), {
   root: path.join(__dirname, "../static"),
 });
 
 const routes = glob
-  .sync(path.join(__dirname, "routes**/*.svelte"))
+  .sync(path.join(__dirname, "routes/**/*.svelte"))
   .map((file) => {
-    const route = `/${path
+    const routeFile = path
       .relative(path.join(__dirname, "routes"), file)
-      .replace(/\.svelte$/, "")
+      .replace(/\.svelte$/, "");
+
+    const route = `/${routeFile
       .replace(/\/index$/, "")
       .replace(/^index$/, "")}`;
-    const component = require(file).default;
+    const component = path.join(__dirname, ".routes/" + routeFile + ".js");
     return { route, component };
   });
 
 routes.forEach(({ route, component }) => {
   console.log(route);
-  fastify.get(route, (req, res) => {
-    const result = component.render();
-    console.log("result :>> ", result);
+  fastify.get(route, async (req, res) => {
+    const result = require(component).default.render();
     const { html, css, head } = result;
 
-    res.type("text/html").send(`
-      <html>
-        <head>
-          ${head}
-          <style>${css.code}</style>
-        </head>
-        <body>${html}</body>
-      </html>
-    `);
+    res.type("text/html").send(
+      minify(
+        `<html>
+          <head>
+            ${head}
+            <style>${css.code}</style>
+          </head>
+          <body>${html}</body>
+        </html>`,
+        { collapseWhitespace: true }
+      )
+    );
   });
 });
 
