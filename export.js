@@ -24,8 +24,11 @@ const routes = glob
     const { html, css, head } = render;
 
     const result = minify(
-      `<html>
-          <head>
+      `<!DOCTYPE html>
+        <html lang="en">
+        <head>
+          <meta charset=utf-8>
+          <meta name="viewport" content="width=device-width, initial-scale=1">
             ${head}
             <style>${css.code}</style>
           </head>
