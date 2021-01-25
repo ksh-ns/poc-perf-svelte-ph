@@ -3,13 +3,13 @@ const glob = require("glob");
 const esbuild = require("esbuild");
 const sveltePlugin = require("esbuild-svelte");
 
-const go = () => {
-  const files = glob
-    .sync(path.join(__dirname, "server/routes/**/*.svelte"))
-    .map((file) => path.relative(__dirname, file));
+const go = async () => {
+  try {
+    const files = glob
+      .sync(path.join(__dirname, "server/routes/**/*.svelte"))
+      .map((file) => path.relative(__dirname, file));
 
-  esbuild
-    .build({
+    await esbuild.build({
       entryPoints: files,
       bundle: true,
       platform: "node",
@@ -28,8 +28,11 @@ const go = () => {
         }),
       ],
       logLevel: "info",
-    })
-    .catch(() => process.exit(1));
+    });
+  } catch (err) {
+    console.error(err);
+    process.exit(1);
+  }
 };
 
 go();

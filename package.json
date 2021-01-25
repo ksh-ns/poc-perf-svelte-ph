@@ -6,8 +6,13 @@
   "scripts": {
     "dev": "nodemon",
     "start": "node server",
-    "build": "NODE_ENV=production node build.js",
-    "export": "cp -R server/static/. public; yarn build; NODE_ENV=production node export.js"
+    "clean": "rm -rf server/.routes public",
+    "build": "run-p build:*",
+    "build:components": "NODE_ENV=production node build.js",
+    "build:static": "cp -R server/static/. public",
+    "try": "run-s clean build start",
+    "try-static": "run-s clean build export; npx serve public -p 3000",
+    "export": "NODE_ENV=production node export.js"
   },
   "dependencies": {
     "cssnano": "^4.1.10",
@@ -23,8 +28,8 @@
     "svelte-preprocess": "^4.6.1"
   },
   "devDependencies": {
-    "@architect/sandbox": "^3.3.4",
     "nodemon": "^2.0.7",
+    "npm-run-all": "^4.1.5",
     "postcss-import": "^14.0.0",
     "postcss-nesting": "^7.0.1",
     "tailwindcss": "^2.0.2"
